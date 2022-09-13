@@ -44,5 +44,5 @@ flutter:
           weight: 700
         - asset: assets/fonts/SourceSansPro-Regular.ttf
           style: normal 
-        - asset: assets/fonts/SourceSansPro-Semibold.ttf
+        - asset: assets/fonts/SourceSansPro-SemiBold.ttf
           weight: 600
