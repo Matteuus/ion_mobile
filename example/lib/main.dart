@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/ion_mobile.dart';
 import 'package:widgetbook/widgetbook.dart';
 
@@ -36,6 +38,24 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IonButtonPrimary(
+              icon: SvgPicture.asset(
+                IonIcons.localization,
+                color: Colors.red,
+                height: 20,
+              ),
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonSecundary(
+              icon: SvgPicture.asset('assets/icons/localization.svg'),
               text: "Salvar",
               height: 48.h,
               width: 296.w,
