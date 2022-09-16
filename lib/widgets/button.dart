@@ -13,7 +13,8 @@ abstract class IonButton extends StatelessWidget {
   void Function(bool) onHover = (bool isHover) {};
   void Function(TapUpDetails) onTapUp = (TapUpDetails details) {};
   void Function(TapDownDetails) onTapDown = (TapDownDetails details) {};
-  SvgPicture? icon;
+  String? icon;
+  Color? iconColor;
   final bool disabled;
   final List<Color> gradientColors;
   bool isLoading = false;
@@ -32,6 +33,7 @@ abstract class IonButton extends StatelessWidget {
     required this.height,
     required this.borderColor,
     this.icon,
+    this.iconColor,
     this.disabled = false,
     this.gradientColors = const [
       IonMainColors.neutral1,
@@ -83,12 +85,13 @@ abstract class IonButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // SvgPicture.asset(
-                //   'assets/icons/clip.svg',
-                //   color: Colors.red,
-                //   height: 20,
-                //   width: 20,
-                // ),
+                !isLoading?SvgPicture.asset(
+                  icon!,
+                  package: 'ion_mobile',
+                  allowDrawingOutsideViewBox: true,
+                  color: iconColor,
+                ):const SizedBox(),
+                SizedBox(width: 8.w),
                 Visibility(
                   visible: isLoading,
                   child: FadeInRight(
@@ -98,7 +101,6 @@ abstract class IonButton extends StatelessWidget {
                             radius: 10.r,
                             strokeWidth: 2,
                             gradientColors: gradientColors),
-                        //SizedBox(width: 8.w),
                       ],
                     ),
                   ),
@@ -136,6 +138,7 @@ class IonButtonPrimary extends IonButton {
       required void Function() onTap,
       super.disabled,
       super.icon,
+      super.iconColor,
       required super.height,
       required super.width,
       required super.isLoading})
@@ -181,6 +184,7 @@ class IonButtonSecundary extends IonButton {
       required String text,
       required void Function() onTap,
       super.icon,
+      super.iconColor,
       super.disabled,
       required super.height,
       required super.width,
