@@ -23,7 +23,8 @@ abstract class IonTextStyle extends TextStyle {
 
 enum IonFontWeight {
   regular(FontWeight.w400),
-  semibold(FontWeight.w500),
+  semibold(FontWeight.w500), //semibold não está disponível no design system
+  medium(FontWeight.w600),
   bold(FontWeight.w700);
 
   final FontWeight fontWeight;
