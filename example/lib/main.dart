@@ -36,6 +36,14 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            IonChipSelected(
+              text: 'Loren Ipsum, 100 - Centro',
+              icon: IonIcons.localization,
+              onDeleted: () => debugPrint('teste'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
             IonButtonPrimary(
               icon: IonIcons.clip,
               iconColor: Colors.white,
