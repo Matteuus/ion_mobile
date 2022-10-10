@@ -7,14 +7,15 @@ import 'package:ion_mobile/design/typography.dart';
 import 'package:ion_mobile/widgets/circular_loading.dart';
 
 abstract class IonButton extends StatelessWidget {
-  final String text;
+  String text;
   final void Function() onTap;
   void Function() onTapCancel = () {};
   void Function(bool) onHover = (bool isHover) {};
   void Function(TapUpDetails) onTapUp = (TapUpDetails details) {};
   void Function(TapDownDetails) onTapDown = (TapDownDetails details) {};
-  String? icon;
-  Color? iconColor;
+  final Widget? icon;
+  String? ionIcon;
+  Color? ionIconColor;
   final bool disabled;
   final List<Color> gradientColors;
   bool isLoading = false;
@@ -26,14 +27,15 @@ abstract class IonButton extends StatelessWidget {
 
   IonButton({
     Key? key,
-    required this.text,
+    this.text = '',
     required this.onTap,
     required this.color,
     required this.width,
     required this.height,
     required this.borderColor,
     this.icon,
-    this.iconColor,
+    this.ionIcon,
+    this.ionIconColor,
     this.disabled = false,
     this.gradientColors = const [
       IonMainColors.neutral1,
@@ -85,18 +87,19 @@ abstract class IonButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                (!isLoading && icon != null)
+                !isLoading && ionIcon != null
                     ? SvgPicture.asset(
-                        icon!,
+                        ionIcon!,
                         package: 'ion_mobile',
                         allowDrawingOutsideViewBox: true,
-                        color: iconColor,
+                        color: ionIconColor,
                       )
-                    : const SizedBox(),
-                SizedBox(width: 8.w),
+                    : !isLoading && icon != null
+                        ? icon!
+                        : const SizedBox(),
                 Visibility(
                   visible: isLoading,
-                  child: FadeInRight(
+                  child: ZoomIn(
                     child: Row(
                       children: [
                         IonCircularLoading(
@@ -108,22 +111,29 @@ abstract class IonButton extends StatelessWidget {
                   ),
                 ),
                 AnimatedContainer(
-                  transform: Matrix4.translationValues(
-                    isLoading ? 8.w : 0,
-                    0,
-                    0,
-                  ),
-                  duration: const Duration(milliseconds: 500),
-                  child: Text(
-                    isLoading ? 'Loading' : text,
-                    style: IonTextStyleBody(
-                      ionFontWeight: IonFontWeight.medium,
-                      ionFontStyle: IonFontStyle.normal,
-                      ionBodyColor: ionBodyColor,
-                      ionFontSize: IonBodyFontSizeHeight.large,
+                    transform: Matrix4.translationValues(
+                      isLoading ? 8.w : 0,
+                      0,
+                      0,
                     ),
-                  ),
-                ),
+                    duration: const Duration(milliseconds: 500),
+                    child: text != ''
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                isLoading ? 'Loading' : text,
+                                style: IonTextStyleBody(
+                                  ionFontWeight: IonFontWeight.medium,
+                                  ionFontStyle: IonFontStyle.normal,
+                                  ionBodyColor: ionBodyColor,
+                                  ionFontSize: IonBodyFontSizeHeight.large,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox()),
               ],
             ),
           ),
@@ -136,11 +146,12 @@ abstract class IonButton extends StatelessWidget {
 class IonButtonPrimary extends IonButton {
   IonButtonPrimary(
       {Key? key,
-      required String text,
+      String text = '',
       required void Function() onTap,
       super.disabled,
       super.icon,
-      super.iconColor = IonMainColors.neutral1,
+      super.ionIcon,
+      super.ionIconColor = IonMainColors.neutral1,
       required super.height,
       required super.width,
       required super.isLoading})
@@ -183,10 +194,11 @@ class IonButtonPrimary extends IonButton {
 class IonButtonSecundary extends IonButton {
   IonButtonSecundary(
       {Key? key,
-      required String text,
+      String text = '',
       required void Function() onTap,
       super.icon,
-      super.iconColor = IonMainColors.primary6,
+      super.ionIcon,
+      super.ionIconColor = IonMainColors.primary6,
       super.disabled,
       required super.height,
       required super.width,
