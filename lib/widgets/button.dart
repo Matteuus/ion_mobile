@@ -240,7 +240,9 @@ class IonButtonSecundary extends IonButton {
 
   @override
   void Function(TapUpDetails details) get onTapUp => (details) {
-        color = IonMainColors.primary6;
+        color = IonMainColors.neutral1;
+        borderColor = IonMainColors.neutral4;
+        ionBodyColor = IonBodyColor.primary6;
       };
 
   @override
