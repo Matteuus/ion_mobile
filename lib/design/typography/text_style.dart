@@ -45,7 +45,8 @@ enum IonBodyColor {
   neutral8(IonMainColors.neutral8),
   neutral7(IonMainColors.neutral7),
   neutral1(IonMainColors.neutral1),
-  primary6(IonMainColors.primary6);
+  primary6(IonMainColors.primary6),
+  primary7(IonMainColors.primary7);
 
   final Color color;
 

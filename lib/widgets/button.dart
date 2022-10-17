@@ -19,7 +19,7 @@ abstract class IonButton extends StatelessWidget {
   final bool disabled;
   final List<Color> gradientColors;
   bool isLoading = false;
-  final IonBodyColor ionBodyColor;
+  IonBodyColor ionBodyColor;
   Color color;
   Color borderColor;
   final double width;
@@ -224,6 +224,7 @@ class IonButtonSecundary extends IonButton {
   void Function(bool hover) get onHover => (hover) {
         if (hover) {
           color = IonMainColors.primary1;
+          borderColor = IonMainColors.primary5;
         } else {
           color = IonMainColors.neutral1;
         }
@@ -231,7 +232,10 @@ class IonButtonSecundary extends IonButton {
 
   @override
   void Function() get onTapCancel => () {
-        color = IonMainColors.primary6;
+        color = IonMainColors.primary2;
+        borderColor = IonMainColors.primary80;
+        ionBodyColor = IonBodyColor.primary7;
+        ionIconColor = IonMainColors.primary7;
       };
 
   @override
@@ -242,6 +246,8 @@ class IonButtonSecundary extends IonButton {
   @override
   void Function(TapDownDetails details) get onTapDown => (details) {
         color = IonMainColors.primary2;
-        borderColor = IonMainColors.primary5;
+        borderColor = IonMainColors.primary80;
+        ionBodyColor = IonBodyColor.primary7;
+        ionIconColor = IonMainColors.primary7;
       };
 }
