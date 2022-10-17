@@ -74,20 +74,27 @@ class _HomeState extends State<Home> {
               height: 10,
             ),
             IonButtonSecundary(
-                icon: SvgPicture.asset(
-                  'assets/icons/Photo.svg',
-                  color: IonMainColors.primary6,
-                  height: 30,
-                ),
-                // text: "Salvar",
-                height: 60.h,
-                width: 60.w,
-                isLoading: false,
-                onTap: () {}
-                //  => setState(() {
-                //   isLoading = !isLoading;
-                // }),
-                ),
+              icon: SvgPicture.asset(
+                'assets/icons/Photo.svg',
+                color: IonMainColors.primary6,
+                height: 30,
+              ),
+              height: 60.h,
+              width: 60.w,
+              isLoading: isLoading,
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonInput(
+                maxLines: 3,
+                height: 82.h,
+                width: 292.w,
+                hintText:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pharetra nunc ac tempus porttitor. Suspendisse eleifend nec justo sed tempor. Praesent nec ipsum at justo scelerisque suscipit eget vel nisl...'),
           ],
         ),
       ),
