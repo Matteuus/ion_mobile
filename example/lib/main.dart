@@ -43,6 +43,11 @@ class _HomeState extends State<Home> {
               icon: IonIcons.localization,
               onDeleted: () => debugPrint('teste'),
             ),
+            IonChipUnselected(
+              text: 'Loren Ipsum, 100 - Centro',
+              icon: IonIcons.localization,
+              onDeleted: () => debugPrint('teste'),
+            ),
             const SizedBox(
               height: 10,
             ),
