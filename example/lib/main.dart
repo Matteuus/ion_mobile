@@ -43,6 +43,9 @@ class _HomeState extends State<Home> {
               icon: IonIcons.localization,
               onDeleted: () => debugPrint('teste'),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             IonChipUnselected(
               text: 'Loren Ipsum, 100 - Centro',
               icon: IonIcons.localization,
@@ -52,7 +55,7 @@ class _HomeState extends State<Home> {
               height: 10,
             ),
             IonButtonPrimary(
-              ionIcon: IonIcons.clip,
+              ionIcon: IonIcons.pencil,
               ionIconColor: Colors.white,
               text: "Salvar",
               height: 48.h,

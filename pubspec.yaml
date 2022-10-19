@@ -33,6 +33,7 @@ flutter:
     - packages/ion_mobile/assets/icons/localization.svg
     - packages/ion_mobile/assets/icons/clip.svg
     - packages/ion_mobile/assets/icons/close.svg
+    - packages/ion_mobile/assets/icons/pencil.svg
 
   #
   # For details regarding assets in packages, see

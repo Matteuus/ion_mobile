@@ -9,6 +9,7 @@ class IonInput extends StatelessWidget {
   final int maxLines;
   final TextInputType? keyboardType;
   final List<TextInputFormatter>? inputFormatters;
+  final TextEditingController? controller;
 
   const IonInput(
       {super.key,
@@ -17,7 +18,8 @@ class IonInput extends StatelessWidget {
       required this.hintText,
       this.maxLines = 1,
       this.keyboardType,
-      this.inputFormatters});
+      this.inputFormatters,
+      this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class IonInput extends StatelessWidget {
       height: height,
       width: width,
       child: TextField(
+        controller: controller,
         keyboardType: keyboardType,
         inputFormatters: inputFormatters,
         maxLines: maxLines,
