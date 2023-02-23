@@ -30,7 +30,7 @@ flutter:
 
   # To add assets to your package, add an assets section, like this:
   assets:
-    - packages/ion_mobile/assets/icons/localization.svg
+    - packages/ion_mobile/assets/icons/
     - packages/ion_mobile/assets/icons/clip.svg
     - packages/ion_mobile/assets/icons/close.svg
     - packages/ion_mobile/assets/icons/pencil.svg
