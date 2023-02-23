@@ -13,6 +13,7 @@ class IonMainColors {
   static const Color primary6 = Color(0xFF0858CE);
   static const Color primary7 = Color(0xFF06439D);
   static const Color primary8 = Color(0xFF042A62);
+  static const Color primary80 = Color(0xFF146FF5);
 
   static const Color neutral = neutral6;
   static const Color neutral1 = Color(0xFFFCFCFD);

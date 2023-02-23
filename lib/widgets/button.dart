@@ -1,33 +1,48 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/typography.dart';
 import 'package:ion_mobile/widgets/circular_loading.dart';
 
 abstract class IonButton extends StatelessWidget {
-  final String text;
+  String text;
   final void Function() onTap;
   void Function() onTapCancel = () {};
   void Function(bool) onHover = (bool isHover) {};
   void Function(TapUpDetails) onTapUp = (TapUpDetails details) {};
   void Function(TapDownDetails) onTapDown = (TapDownDetails details) {};
+  final Widget? icon;
+  String? ionIcon;
+  Color? ionIconColor;
   final bool disabled;
+  final List<Color> gradientColors;
   bool isLoading = false;
-  final IonBodyColor ionBodyColor;
+  IonBodyColor ionBodyColor;
   Color color;
-  final Color borderColor;
+  Color borderColor;
   final double width;
   final double height;
+
   IonButton({
     Key? key,
-    required this.text,
+    this.text = '',
     required this.onTap,
     required this.color,
     required this.width,
     required this.height,
     required this.borderColor,
+    this.icon,
+    this.ionIcon,
+    this.ionIconColor,
     this.disabled = false,
+    this.gradientColors = const [
+      IonMainColors.neutral1,
+      IonMainColors.neutral2,
+      IonMainColors.neutral3,
+      IonMainColors.neutral4,
+    ],
     required this.isLoading,
     required this.ionBodyColor,
   }) : super(key: key);
@@ -62,7 +77,7 @@ abstract class IonButton extends StatelessWidget {
           height: height,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(10),
             border: Border.all(
               color: borderColor,
               width: 1,
@@ -72,43 +87,53 @@ abstract class IonButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                !isLoading && ionIcon != null
+                    ? SvgPicture.asset(
+                        ionIcon!,
+                        package: 'ion_mobile',
+                        allowDrawingOutsideViewBox: true,
+                        color: ionIconColor,
+                      )
+                    : !isLoading && icon != null
+                        ? icon!
+                        : const SizedBox(),
                 Visibility(
                   visible: isLoading,
-                  child: FadeInRight(
+                  child: ZoomIn(
                     child: Row(
                       children: [
                         IonCircularLoading(
-                          radius: 10.r,
-                          strokeWidth: 2,
-                          gradientColors: const [
-                            IonMainColors.neutral1,
-                            IonMainColors.neutral2,
-                            IonMainColors.neutral3,
-                            IonMainColors.neutral4,
-                          ],
-                        ),
-                        //SizedBox(width: 8.w),
+                            radius: 10.r,
+                            strokeWidth: 2,
+                            gradientColors: gradientColors),
                       ],
                     ),
                   ),
                 ),
                 AnimatedContainer(
-                  transform: Matrix4.translationValues(
-                    isLoading ? 8.w : 0,
-                    0,
-                    0,
-                  ),
-                  duration: const Duration(milliseconds: 500),
-                  child: Text(
-                    text,
-                    style: IonTextStyleBody(
-                      ionFontWeight: IonFontWeight.regular,
-                      ionFontStyle: IonFontStyle.normal,
-                      ionBodyColor: ionBodyColor,
-                      ionFontSize: IonBodyFontSizeHeight.large,
+                    transform: Matrix4.translationValues(
+                      isLoading ? 8.w : 0,
+                      0,
+                      0,
                     ),
-                  ),
-                ),
+                    duration: const Duration(milliseconds: 500),
+                    child: text != ''
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: Text(
+                                isLoading ? 'Loading' : text,
+                                style: IonTextStyleBody(
+                                  ionFontWeight: IonFontWeight.medium,
+                                  ionFontStyle: IonFontStyle.normal,
+                                  ionBodyColor: ionBodyColor,
+                                  ionFontSize: IonBodyFontSizeHeight.large,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox()),
               ],
             ),
           ),
@@ -121,8 +146,12 @@ abstract class IonButton extends StatelessWidget {
 class IonButtonPrimary extends IonButton {
   IonButtonPrimary(
       {Key? key,
-      required String text,
+      String text = '',
       required void Function() onTap,
+      super.disabled,
+      super.icon,
+      super.ionIcon,
+      super.ionIconColor = IonMainColors.neutral1,
       required super.height,
       required super.width,
       required super.isLoading})
@@ -162,20 +191,65 @@ class IonButtonPrimary extends IonButton {
       };
 }
 
-// class IonButtonSecondary extends IonButton {
-//   const IonButtonSecondary({
-//     Key? key,
-//     required String text,
-//     required void Function() onTap,
-//     required IonTextStyle textStyle,
-//     required super.height,
-//     required super.width,
-//   }) : super(
-//           key: key,
-//           text: text,
-//           onTap: onTap,
-//           color: Colors.transparent,
-//           borderColor: IonMainColors.primary6,
-//           textStyle: textStyle,
-//         );
-// }
+class IonButtonSecundary extends IonButton {
+  IonButtonSecundary(
+      {Key? key,
+      String text = '',
+      required void Function() onTap,
+      super.icon,
+      super.ionIcon,
+      super.ionIconColor = IonMainColors.primary6,
+      super.disabled,
+      required super.height,
+      required super.width,
+      required super.isLoading})
+      : super(
+          key: key,
+          text: text,
+          onTap: onTap,
+          color: IonMainColors.neutral1,
+          borderColor: IonMainColors.neutral4,
+          ionBodyColor: IonBodyColor.primary6,
+          gradientColors: const [
+            IonMainColors.primary6,
+            IonMainColors.primary5,
+            IonMainColors.primary4,
+            IonMainColors.primary3,
+          ],
+        );
+
+  // corrigir o onTapUp que deveria mudar a cor porem nao esta alterando pois e usado o setState e ele reconstroi o componente e consequentemente chama o construtor
+
+  @override
+  void Function(bool hover) get onHover => (hover) {
+        if (hover) {
+          color = IonMainColors.primary1;
+          borderColor = IonMainColors.primary5;
+        } else {
+          color = IonMainColors.neutral1;
+        }
+      };
+
+  @override
+  void Function() get onTapCancel => () {
+        color = IonMainColors.primary2;
+        borderColor = IonMainColors.primary80;
+        ionBodyColor = IonBodyColor.primary7;
+        ionIconColor = IonMainColors.primary7;
+      };
+
+  @override
+  void Function(TapUpDetails details) get onTapUp => (details) {
+        color = IonMainColors.neutral1;
+        borderColor = IonMainColors.neutral4;
+        ionBodyColor = IonBodyColor.primary6;
+      };
+
+  @override
+  void Function(TapDownDetails details) get onTapDown => (details) {
+        color = IonMainColors.primary2;
+        borderColor = IonMainColors.primary80;
+        ionBodyColor = IonBodyColor.primary7;
+        ionIconColor = IonMainColors.primary7;
+      };
+}
