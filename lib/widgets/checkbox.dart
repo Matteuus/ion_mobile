@@ -74,62 +74,88 @@ class _IonCheckboxState extends State<IonCheckbox> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        setState(() {
-          widget.onChange(!widget.isChecked);
-        });
-      },
-      autofocus: false,
-      focusColor: Colors.transparent,
-      splashColor: Colors.transparent,
-      onHover: onHover,
-      borderRadius: BorderRadius.circular(4),
-      child: Container(
-        height: 24.h,
-        width: 6.w,
-        decoration: BoxDecoration(
-          border: isHovering ? null : focusBorderColor,
-          borderRadius: BorderRadius.circular(4.r),
-        ),
-        child: Container(
-          decoration: BoxDecoration(
-            color: isHovering ? widget.hoverColor : Colors.transparent,
-            borderRadius: BorderRadius.circular(100.r),
-          ),
-          child: Stack(
-            children: [
-              Center(
+    return widget.disable
+        ? Stack(children: [
+            Center(
                 child: Container(
-                  height: 16.h,
-                  width: 4.w,
-                  decoration: BoxDecoration(
-                    color: widget.isChecked
-                        ? widget.fillColor
-                        : IonMainColors.neutral1,
-                    border: Border.all(
-                      color: widget.isChecked
-                          ? Colors.transparent
-                          : widget.borderColor,
-                    ),
-                    borderRadius: BorderRadius.circular(4.r),
-                  ),
-                  child: widget.isChecked || isHovering
-                      ? Icon(
-                          Icons.check,
-                          size: 13.h,
+              height: 16.h,
+              width: 4.w,
+              decoration: BoxDecoration(
+                color: widget.isChecked
+                    ? IonMainColors.neutral2
+                    : IonMainColors.neutral3,
+                border: Border.all(
+                  color: widget.isChecked
+                      ? Colors.transparent
+                      : IonMainColors.neutral4,
+                ),
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: widget.isChecked
+                  ? Icon(
+                      Icons.check,
+                      size: 13.h,
+                      color: IonMainColors.neutral4,
+                    )
+                  : null,
+            ))
+          ])
+        : InkWell(
+            onTap: () {
+              setState(() {
+                widget.onChange(!widget.isChecked);
+              });
+            },
+            autofocus: false,
+            focusColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onHover: onHover,
+            borderRadius: BorderRadius.circular(4),
+            child: Container(
+              height: 24.h,
+              width: 6.w,
+              decoration: BoxDecoration(
+                border: isHovering ? null : focusBorderColor,
+                borderRadius: BorderRadius.circular(4.r),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: isHovering ? widget.hoverColor : Colors.transparent,
+                  borderRadius: BorderRadius.circular(100.r),
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        height: 16.h,
+                        width: 4.w,
+                        decoration: BoxDecoration(
                           color: widget.isChecked
-                              ? IonMainColors.primary1
-                              : widget.iconColor,
-                        )
-                      : null,
+                              ? widget.fillColor
+                              : IonMainColors.neutral1,
+                          border: Border.all(
+                            color: widget.isChecked
+                                ? Colors.transparent
+                                : widget.borderColor,
+                          ),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: widget.isChecked || isHovering
+                            ? Icon(
+                                Icons.check,
+                                size: 13.h,
+                                color: widget.isChecked
+                                    ? IonMainColors.primary1
+                                    : widget.iconColor,
+                              )
+                            : null,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
 
