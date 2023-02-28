@@ -15,6 +15,8 @@ abstract class IonCheckbox extends StatefulWidget {
   final Color hoverColor;
   final bool autofocus;
   final List<IonCheckboxSimple> items;
+  final double height;
+  final double width;
 
   IonCheckbox({
     super.key,
@@ -29,6 +31,8 @@ abstract class IonCheckbox extends StatefulWidget {
     this.hoverColor = IonMainColors.primary2,
     this.autofocus = false,
     this.items = const [],
+    this.height = 24,
+    this.width = 24,
   });
 
   @override
@@ -91,6 +95,8 @@ class _IonCheckboxState extends State<IonCheckbox> {
               autofocus: item.autofocus,
               disable: item.disable,
               icon: item.icon,
+              height: widget.height,
+              width: widget.width,
             ),
         ],
       );
@@ -98,8 +104,8 @@ class _IonCheckboxState extends State<IonCheckbox> {
       return widget.disable
           ? Center(
               child: Container(
-              height: 16.h,
-              width: 4.w,
+              height: widget.height * 0.66,
+              width: widget.width * 0.66,
               decoration: BoxDecoration(
                 color: widget.isChecked
                     ? IonMainColors.neutral2
@@ -114,7 +120,7 @@ class _IonCheckboxState extends State<IonCheckbox> {
               child: widget.isChecked
                   ? Icon(
                       Icons.check,
-                      size: 13.h,
+                      size: widget.height * 0.8,
                       color: IonMainColors.neutral4,
                     )
                   : null,
@@ -141,6 +147,8 @@ class _IonCheckboxState extends State<IonCheckbox> {
                       borderColor: widget.borderColor,
                       iconColor: widget.iconColor,
                       label: widget.label,
+                      height: widget.height,
+                      width: widget.width,
                     )
                   : IonCheckboxItemNoLabel(
                       isHovering: isHovering,
@@ -150,6 +158,8 @@ class _IonCheckboxState extends State<IonCheckbox> {
                       hoverColor: widget.hoverColor,
                       iconColor: widget.iconColor,
                       isChecked: widget.isChecked,
+                      height: widget.height,
+                      width: widget.width,
                     ),
             );
     }
@@ -169,6 +179,8 @@ class IonCheckboxSimple extends IonCheckbox {
     super.icon,
     super.iconColor,
     super.label,
+    super.height,
+    super.width,
   });
 }
 
@@ -191,6 +203,8 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
     required this.fillColor,
     required this.borderColor,
     required this.iconColor,
+    required this.height,
+    required this.width,
   });
 
   final bool isHovering;
@@ -200,10 +214,14 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
   final Color fillColor;
   final Color borderColor;
   final Color iconColor;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
+      width: width,
       decoration: BoxDecoration(
         border: isHovering ? null : focusBorderColor,
         borderRadius: BorderRadius.circular(4.r),
@@ -215,8 +233,8 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
         ),
         child: Center(
           child: Container(
-            height: 16.h,
-            width: 4.w,
+            height: height * 0.66,
+            width: width * 0.66,
             decoration: BoxDecoration(
               color: isChecked ? fillColor : IonMainColors.neutral1,
               border: Border.all(
@@ -227,7 +245,7 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
             child: isChecked || isHovering
                 ? Icon(
                     Icons.check,
-                    size: 13.h,
+                    size: height * 0.5,
                     color: isChecked ? IonMainColors.primary1 : iconColor,
                   )
                 : null,
@@ -249,6 +267,8 @@ class IonCheckboxItemLabel extends StatelessWidget {
     required this.borderColor,
     required this.iconColor,
     required this.label,
+    required this.height,
+    required this.width,
   });
 
   final bool isHovering;
@@ -259,6 +279,8 @@ class IonCheckboxItemLabel extends StatelessWidget {
   final Color borderColor;
   final Color iconColor;
   final String label;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
@@ -281,6 +303,8 @@ class IonCheckboxItemLabel extends StatelessWidget {
           fillColor: fillColor,
           borderColor: borderColor,
           iconColor: iconColor,
+          height: height,
+          width: width,
         ),
         const SizedBox(width: 12),
         Text(label, style: style),
