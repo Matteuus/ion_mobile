@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ion_mobile/design/colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ion_mobile/design/typography.dart';
+
+enum IonCheckboxType {
+  check("assets/icons/Check.svg"),
+  indeterminate("assets/icons/indetermidate.svg");
+
+  final String icon;  
+
+  const IonCheckboxType(this.icon);
+}
 
 abstract class IonCheckbox extends StatefulWidget {
   final String label;
   final void Function(bool) onChange;
-  final String icon;
   Color fillColor;
   Color iconColor;
   final bool isChecked;
@@ -17,12 +25,12 @@ abstract class IonCheckbox extends StatefulWidget {
   final List<IonCheckboxSimple> items;
   final double height;
   final double width;
+  final IonCheckboxType type;
 
   IonCheckbox({
     super.key,
     this.label = '',
     required this.onChange,
-    this.icon = '',
     this.fillColor = IonMainColors.primary6,
     this.iconColor = IonMainColors.primary1,
     required this.isChecked,
@@ -33,6 +41,7 @@ abstract class IonCheckbox extends StatefulWidget {
     this.items = const [],
     this.height = 24,
     this.width = 24,
+    this.type = IonCheckboxType.check,
   });
 
   @override
@@ -94,15 +103,16 @@ class _IonCheckboxState extends State<IonCheckbox> {
               onChange: item.onChange,
               autofocus: item.autofocus,
               disable: item.disable,
-              icon: item.icon,
               height: widget.height,
               width: widget.width,
+              type: widget.type,
             ),
         ],
       );
     } else {
       return InkWell(
         onTap: () {
+          if (widget.disable) return;
           setState(() {
             widget.onChange(!widget.isChecked);
           });
@@ -111,6 +121,7 @@ class _IonCheckboxState extends State<IonCheckbox> {
         focusColor: Colors.transparent,
         splashColor: Colors.transparent,
         onHover: widget.disable ? null : onHover,
+        splashFactory: NoSplash.splashFactory,
         hoverColor: Colors.transparent,
         borderRadius: BorderRadius.circular(4),
         child: widget.label != ''
@@ -126,6 +137,7 @@ class _IonCheckboxState extends State<IonCheckbox> {
                 height: widget.height,
                 width: widget.width,
                 disable: widget.disable,
+                icon: widget.type.icon,
               )
             : IonCheckboxItemNoLabel(
                 isHovering: isHovering,
@@ -138,6 +150,7 @@ class _IonCheckboxState extends State<IonCheckbox> {
                 height: widget.height,
                 width: widget.width,
                 disable: widget.disable,
+                icon: widget.type.icon,
               ),
       );
     }
@@ -154,11 +167,11 @@ class IonCheckboxSimple extends IonCheckbox {
     super.disable,
     super.fillColor,
     super.hoverColor,
-    super.icon,
     super.iconColor,
     super.label,
     super.height,
     super.width,
+    super.type,
   });
 }
 
@@ -184,6 +197,7 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
     required this.height,
     required this.width,
     required this.disable,
+    required this.icon,
   });
 
   final bool isHovering;
@@ -196,6 +210,7 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
   final double height;
   final double width;
   final bool disable;
+  final String icon;
 
   static const double borderSize = 1.0;
   static const double borderRadius = 4.0;
@@ -253,9 +268,9 @@ class IonCheckboxItemNoLabel extends StatelessWidget {
               borderRadius: BorderRadius.circular(borderRadius),
             ),
             child: isChecked || isHovering
-                ? Icon(
-                    Icons.check,
-                    size: height * 0.5,
+                ? SvgPicture.asset(
+                    icon,
+                    height: height,
                     color: foregroundColor,
                   )
                 : null,
@@ -280,6 +295,7 @@ class IonCheckboxItemLabel extends StatelessWidget {
     required this.height,
     required this.width,
     this.disable = false,
+    required this.icon,
   });
 
   final bool isHovering;
@@ -293,6 +309,7 @@ class IonCheckboxItemLabel extends StatelessWidget {
   final double height;
   final double width;
   final bool disable;
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +342,7 @@ class IonCheckboxItemLabel extends StatelessWidget {
           height: height,
           width: width,
           disable: disable,
+          icon: icon,
         ),
         const SizedBox(width: 12),
         Text(label, style: disable ? styleDisable : style),
