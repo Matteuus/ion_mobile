@@ -7,7 +7,7 @@ enum IonCheckboxType {
   check("/home/brisanet/Documentos/ion_mobile/assets/icons/check.svg"),
   indeterminate("/home/brisanet/Documentos/ion_mobile/assets/icons/sub.svg");
 
-  final String icon;  
+  final String icon;
 
   const IonCheckboxType(this.icon);
 }
@@ -124,6 +124,11 @@ class _IonCheckboxState extends State<IonCheckbox> {
         splashFactory: NoSplash.splashFactory,
         hoverColor: Colors.transparent,
         borderRadius: BorderRadius.circular(4),
+        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            return Colors.transparent;
+          },
+        ),
         child: widget.label != ''
             ? IonCheckboxItemLabel(
                 isHovering: isHovering,
