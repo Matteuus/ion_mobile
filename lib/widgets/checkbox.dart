@@ -4,8 +4,8 @@ import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/typography.dart';
 
 enum IonCheckboxType {
-  check("assets/icons/Check.svg"),
-  indeterminate("assets/icons/indetermidate.svg");
+  check("/home/brisanet/Documentos/ion_mobile/assets/icons/check.svg"),
+  indeterminate("/home/brisanet/Documentos/ion_mobile/assets/icons/sub.svg");
 
   final String icon;  
 

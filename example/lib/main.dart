@@ -30,6 +30,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool isLoading = false;
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,14 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            IonCheckboxSimple(
+              onChange: (value) {
+                setState(() {
+                  isChecked = value;
+                });
+              },
+              isChecked: isChecked,
+            ),
             IonChipSelected(
               text: 'Loren Ipsum, 100 - Centro',
               icon: IonIcons.localization,
