@@ -227,13 +227,6 @@ class IonRadioButton<T> extends IonRadio {
     required super.onChanged,
     required super.groupValue,
     super.disabled,
-    super.borderColor,
-    super.color,
-    super.fillColor,
-    super.focusBorderColor,
-    super.focusColor,
-    super.hoverColor,
-    super.labelStyle,
     super.size,
     super.autoFocus,
   });
