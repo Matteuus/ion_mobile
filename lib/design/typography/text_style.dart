@@ -44,6 +44,7 @@ enum IonFontStyle {
 enum IonBodyColor {
   neutral8(IonMainColors.neutral8),
   neutral7(IonMainColors.neutral7),
+  neutral5(IonMainColors.neutral5),
   neutral1(IonMainColors.neutral1),
   primary6(IonMainColors.primary6),
   primary7(IonMainColors.primary7);
