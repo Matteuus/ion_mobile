@@ -7,22 +7,21 @@ abstract class IonRadio<T> extends StatefulWidget {
   final T value;
   final T? groupValue;
   final String label;
-  final Color color;
+  Color color;
   final bool disabled;
   final ValueChanged<T?> onChanged;
-  final Color borderColor;
+  Color borderColor;
   final IonTextStyle labelStyle;
   final List<IonRadioButton> items;
-  final Color hoverColor;
+  Color hoverColor;
   final Color focusColor;
-  final Color fillColor;
+  Color fillColor;
   final double size;
   final Color focusBorderColor;
-  final Color focusFillBorderColor;
   final bool autoFocus;
   final Color hoverBorderColor;
 
-  const IonRadio({
+  IonRadio({
     required this.value,
     super.key,
     this.groupValue,
@@ -41,7 +40,6 @@ abstract class IonRadio<T> extends StatefulWidget {
     this.focusColor = IonMainColors.primary5,
     this.fillColor = IonMainColors.neutral1,
     this.size = 24,
-    this.focusFillBorderColor = IonMainColors.primary5,
     this.autoFocus = false,
     this.focusBorderColor = IonMainColors.primary3,
     this.hoverBorderColor = IonMainColors.primary3,
@@ -80,16 +78,70 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
     });
   }
 
-  Color getColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
-    };
-    if (states.any(interactiveStates.contains)) {
-      return Colors.blue;
+  Color getFillColor() {
+    if (widget.disabled) {
+      return Colors.transparent;
     }
-    return Colors.red;
+
+    if (widget.groupValue == widget.value && isHovering) {
+      return IonMainColors.primary1;
+    }
+
+    if (widget.groupValue == widget.value) {
+      return Colors.transparent;
+    }
+
+    if (isHovering) {
+      return widget.hoverColor;
+    }
+
+    return IonMainColors.neutral1;
+  }
+
+  Color getCenterCircleColor() {
+    if (widget.disabled && widget.groupValue == widget.value) {
+      return IonMainColors.neutral2;
+    }
+
+    if (widget.disabled) {
+      return IonMainColors.neutral2;
+    }
+
+    if (widget.groupValue == widget.value && isHovering) {
+      return IonMainColors.primary5;
+    }
+
+    if (widget.groupValue == widget.value) {
+      return IonMainColors.primary6;
+    }
+
+    if (isHovering) {
+      return widget.hoverColor;
+    }
+
+    return IonMainColors.neutral1;
+  }
+
+  Color getCenterCircleBorderColor() {
+    if (widget.disabled) {
+      return (widget.groupValue == widget.value)
+          ? Colors.transparent
+          : IonMainColors.neutral4;
+    }
+
+    if (widget.groupValue == widget.value) {
+      return Colors.transparent;
+    }
+
+    if (hasFocus) {
+      return widget.focusBorderColor;
+    }
+
+    if (isHovering) {
+      return widget.hoverBorderColor;
+    }
+
+    return widget.borderColor;
   }
 
   @override
@@ -118,25 +170,13 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
             width: widget.size,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              color: widget.disabled
-                  ? Colors.transparent
-                  : widget.groupValue == widget.value && isHovering
-                      ? IonMainColors.primary1
-                      : widget.groupValue == widget.value
-                          ? Colors.transparent
-                          : isHovering
-                              ? widget.hoverColor
-                              : widget.fillColor,
+              color: getFillColor(),
               border: Border.all(
-                color: widget.disabled
+                color: isHovering
                     ? Colors.transparent
-                    : widget.groupValue == widget.value
-                        ? Colors.transparent
-                        : isHovering
-                            ? Colors.transparent
-                            : hasFocus
-                                ? widget.focusFillBorderColor
-                                : Colors.transparent,
+                    : hasFocus
+                        ? IonMainColors.primary5
+                        : Colors.transparent,
                 width: hasFocus ? 2 : 1,
               ),
             ),
@@ -146,29 +186,9 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
                 width: widget.size * 0.66,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: widget.disabled && widget.groupValue == widget.value
-                      ? IonMainColors.neutral2
-                      : widget.disabled
-                          ? IonMainColors.neutral2
-                          : widget.groupValue == widget.value && isHovering
-                              ? IonMainColors.primary5
-                              : widget.groupValue == widget.value
-                                  ? widget.color
-                                  : isHovering
-                                      ? widget.hoverColor
-                                      : IonMainColors.neutral1,
+                  color: getCenterCircleColor(),
                   border: Border.all(
-                    color: widget.disabled && widget.groupValue == widget.value
-                        ? Colors.transparent
-                        : widget.disabled
-                            ? IonMainColors.neutral4
-                            : widget.groupValue == widget.value
-                                ? Colors.transparent
-                                : hasFocus
-                                    ? widget.focusBorderColor
-                                    : isHovering
-                                        ? widget.hoverBorderColor
-                                        : widget.borderColor,
+                    color: getCenterCircleBorderColor(),
                     width: 1,
                   ),
                 ),
@@ -220,7 +240,7 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
 }
 
 class IonRadioButton<T> extends IonRadio {
-  const IonRadioButton({
+  IonRadioButton({
     super.key,
     required super.value,
     super.label,
