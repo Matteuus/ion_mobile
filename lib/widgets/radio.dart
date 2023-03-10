@@ -7,21 +7,18 @@ abstract class IonRadio<T> extends StatefulWidget {
   final T value;
   final T? groupValue;
   final String label;
-  Color color;
+  final Color color;
   final bool disabled;
   final ValueChanged<T?> onChanged;
-  Color borderColor;
+  final Color borderColor;
   final IonTextStyle labelStyle;
   final List<IonRadioButton> items;
-  Color hoverColor;
-  final Color focusColor;
-  Color fillColor;
+  final Color hoverColor;
   final double size;
-  final Color focusBorderColor;
   final bool autoFocus;
   final Color hoverBorderColor;
 
-  IonRadio({
+  const IonRadio({
     required this.value,
     super.key,
     this.groupValue,
@@ -37,11 +34,8 @@ abstract class IonRadio<T> extends StatefulWidget {
     ),
     this.items = const [],
     this.hoverColor = IonMainColors.primary1,
-    this.focusColor = IonMainColors.primary5,
-    this.fillColor = IonMainColors.neutral1,
     this.size = 24,
     this.autoFocus = false,
-    this.focusBorderColor = IonMainColors.primary3,
     this.hoverBorderColor = IonMainColors.primary3,
   });
 
@@ -112,7 +106,7 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
     }
 
     if (widget.groupValue == widget.value) {
-      return IonMainColors.primary6;
+      return widget.color;
     }
 
     if (isHovering) {
@@ -134,7 +128,7 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
     }
 
     if (hasFocus) {
-      return widget.focusBorderColor;
+      return IonMainColors.primary3;
     }
 
     if (isHovering) {
@@ -240,7 +234,7 @@ class _IonRadioState<T> extends State<IonRadio<T>> {
 }
 
 class IonRadioButton<T> extends IonRadio {
-  IonRadioButton({
+  const IonRadioButton({
     super.key,
     required super.value,
     super.label,
