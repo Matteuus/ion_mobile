@@ -41,14 +41,19 @@ enum IonFontStyle {
   const IonFontStyle(this.fontStyle);
 }
 
-enum IonBodyColor {
+enum IonTextColor {
   neutral8(IonMainColors.neutral8),
   neutral7(IonMainColors.neutral7),
   neutral1(IonMainColors.neutral1),
   primary6(IonMainColors.primary6),
-  primary7(IonMainColors.primary7);
+  negative6(IonIndicativeColors.negative6),
+  primary7(IonMainColors.primary7),
+  negative7(IonIndicativeColors.negative7),
+
+  //disabled
+  neutral5(IonMainColors.neutral5);
 
   final Color color;
 
-  const IonBodyColor(this.color);
+  const IonTextColor(this.color);
 }

@@ -90,3 +90,7 @@ class IonPresets {
   static const Color preset9 = Color(0xFFD94CD9);
   static const Color preset10 = Color(0xFFD94C92);
 }
+
+class IonExtraColors {
+  static const Color transparent = Colors.transparent;
+}

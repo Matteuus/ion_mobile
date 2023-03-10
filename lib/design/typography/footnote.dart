@@ -5,12 +5,12 @@ import 'package:ion_mobile/design/typography.dart';
 
 class IonTextStyleFootNote extends IonTextStyle {
   final IonBodyFontSizeHeight ionFontSize;
-  final IonBodyColor ionBodyColor;
+  final IonTextColor ionTextColor;
   const IonTextStyleFootNote({
     required super.ionFontWeight,
     required super.ionFontStyle,
     this.ionFontSize = IonBodyFontSizeHeight.regular,
-    this.ionBodyColor = IonBodyColor.neutral8,
+    this.ionTextColor = IonTextColor.neutral8,
   });
 
   @override

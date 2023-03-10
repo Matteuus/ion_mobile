@@ -1,10 +1,11 @@
+import 'package:example/widgets/button.component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutterbook/flutterbook.dart';
 import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/ion_mobile.dart';
-import 'package:widgetbook/widgetbook.dart';
 
 void main() {
   runApp(ScreenUtilInit(
@@ -15,9 +16,11 @@ void main() {
       return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: child,
+        // darkTheme: ThemeData(brightness: Brightness.dark),
+        // themeMode: ThemeMode.dark,
       );
     },
-    child: const Home(),
+    child: const FlutterBookPage(),
   ));
 }
 
@@ -56,7 +59,6 @@ class _HomeState extends State<Home> {
             ),
             IonButtonPrimary(
               ionIcon: IonIcons.pencil,
-              ionIconColor: Colors.white,
               text: "Salvar",
               height: 48.h,
               width: 296.w,
@@ -77,6 +79,30 @@ class _HomeState extends State<Home> {
               onTap: () => setState(() {
                 isLoading = !isLoading;
               }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonGhost(
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonDashed(
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
             ),
             const SizedBox(
               height: 10,
@@ -110,53 +136,80 @@ class _HomeState extends State<Home> {
   }
 }
 
-class HotreloadWidgetbook extends StatelessWidget {
-  const HotreloadWidgetbook({Key? key}) : super(key: key);
+// class HotreloadWidgetbook extends StatelessWidget {
+//   const HotreloadWidgetbook({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Widgetbook.material(
+//         categories: [
+//           WidgetbookCategory(
+//             name: 'widgets',
+//             widgets: [
+//               WidgetbookComponent(
+//                 name: 'Button',
+//                 useCases: [
+//                   WidgetbookUseCase(
+//                     name: 'Primary',
+//                     builder: (context) => Center(
+//                       child: IonButtonPrimary(
+//                         text: context.knobs
+//                             .text(label: "Entrar", initialValue: "Salvar"),
+//                         height: 48.h,
+//                         width: 296.w,
+//                         isLoading: false,
+//                         onTap: () {},
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           )
+//         ],
+//         themes: [
+//           WidgetbookTheme(
+//             name: 'Light',
+//             data: ThemeData.light(),
+//           ),
+//           WidgetbookTheme(
+//             name: 'Dark',
+//             data: ThemeData.dark(),
+//           ),
+//         ],
+//         appInfo: AppInfo(name: 'Ion Mobile'),
+//         devices: [
+//           Apple.iPhone12,
+//           Apple.iPhone13,
+//           Samsung.s10,
+//           Samsung.s21ultra,
+//         ]);
+//   }
+// }
+
+class FlutterBookPage extends StatelessWidget {
+  const FlutterBookPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Widgetbook.material(
+    return Scaffold(
+      body: FlutterBook(
+        //no header pode colocar ion by brisatech com a logo ou alguma coisa do tipo
+        headerPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         categories: [
-          WidgetbookCategory(
-            name: 'widgets',
-            widgets: [
-              WidgetbookComponent(
-                name: 'Button',
-                useCases: [
-                  WidgetbookUseCase(
-                    name: 'Primary',
-                    builder: (context) => Center(
-                      child: IonButtonPrimary(
-                        text: context.knobs
-                            .text(label: "Entrar", initialValue: "Salvar"),
-                        height: 48.h,
-                        width: 296.w,
-                        isLoading: false,
-                        onTap: () {},
-                      ),
-                    ),
-                  ),
+          Category(
+            categoryName: 'Ion',
+            organizers: [
+              Folder(
+                folderName: 'Navigation',
+                organizers: [
+                  buttonComponent(),
                 ],
-              ),
+              )
             ],
           )
         ],
-        themes: [
-          WidgetbookTheme(
-            name: 'Light',
-            data: ThemeData.light(),
-          ),
-          WidgetbookTheme(
-            name: 'Dark',
-            data: ThemeData.dark(),
-          ),
-        ],
-        appInfo: AppInfo(name: 'Ion Mobile'),
-        devices: [
-          Apple.iPhone12,
-          Apple.iPhone13,
-          Samsung.s10,
-          Samsung.s21ultra,
-        ]);
+      ),
+    );
   }
 }

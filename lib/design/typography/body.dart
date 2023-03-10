@@ -4,12 +4,12 @@ import 'package:ion_mobile/design/typography.dart';
 
 class IonTextStyleBody extends IonTextStyle {
   final IonBodyFontSizeHeight ionFontSize;
-  final IonBodyColor ionBodyColor;
+  final IonTextColor ionTextColor;
   const IonTextStyleBody({
     required super.ionFontWeight,
     required super.ionFontStyle,
     this.ionFontSize = IonBodyFontSizeHeight.regular,
-    this.ionBodyColor = IonBodyColor.neutral8,
+    this.ionTextColor = IonTextColor.neutral8,
   });
 
   @override
@@ -19,7 +19,7 @@ class IonTextStyleBody extends IonTextStyle {
   double? get fontSize => ionFontSize.fontSize.sp;
 
   @override
-  Color? get color => ionBodyColor.color;
+  Color? get color => ionTextColor.color;
 }
 
 enum IonBodyFontSizeHeight {

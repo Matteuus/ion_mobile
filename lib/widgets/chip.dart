@@ -42,7 +42,7 @@ class IonChipSelected extends IonChip {
                   style: const IonTextStyleBody(
                       ionFontWeight: IonFontWeight.medium,
                       ionFontStyle: IonFontStyle.normal,
-                      ionBodyColor: IonBodyColor.primary6,
+                      ionTextColor: IonTextColor.primary6,
                       ionFontSize: IonBodyFontSizeHeight.regular)),
             ),
             avatar: icon != null
@@ -82,7 +82,7 @@ class IonChipUnselected extends IonChip {
                   style: const IonTextStyleBody(
                       ionFontWeight: IonFontWeight.medium,
                       ionFontStyle: IonFontStyle.normal,
-                      ionBodyColor: IonBodyColor.primary6,
+                      ionTextColor: IonTextColor.primary6,
                       ionFontSize: IonBodyFontSizeHeight.regular)),
             ),
             avatar: icon != null
