@@ -24,7 +24,8 @@ class IonTextStyleBody extends IonTextStyle {
 
 enum IonBodyFontSizeHeight {
   regular(14, 1.428),
-  large(16, 1.5);
+  large(16, 1.5),
+  small(12, 1.4);
 
   final double fontSize;
   final double height;

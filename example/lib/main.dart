@@ -7,6 +7,8 @@ import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/ion_mobile.dart';
 
+import 'widgets/date_picker.component.dart';
+
 void main() {
   runApp(ScreenUtilInit(
     designSize: const Size(360, 800),
@@ -204,6 +206,12 @@ class FlutterBookPage extends StatelessWidget {
                 folderName: 'Navigation',
                 organizers: [
                   buttonComponent(),
+                ],
+              ),
+              Folder(
+                folderName: 'Data Entry',
+                organizers: [
+                  datePickerComponent(),
                 ],
               )
             ],
