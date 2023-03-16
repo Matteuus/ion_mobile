@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/design/typography.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IonDatePicker extends StatefulWidget {
   final DateTime initialDate;
@@ -22,7 +21,7 @@ class IonDatePicker extends StatefulWidget {
 }
 
 class _IonDatePickerState extends State<IonDatePicker> {
-  late DateTimeRange _selectedDate;
+  late DateTime _selectedDate;
   late DateTime _currentDate;
 
   DateTime? startDate;
@@ -34,24 +33,28 @@ class _IonDatePickerState extends State<IonDatePicker> {
     _currentDate = widget.initialDate;
   }
 
+  // void _selectDateRange(DateTime date) {
+  //   if (startDate == null) {
+  //     startDate = date;
+  //   } else if (endDate == null) {
+  //     endDate = date;
+  //     if (startDate!.isAfter(endDate!)) {
+  //       var temp = startDate;
+  //       startDate = endDate;
+  //       endDate = temp;
+  //     }
+  //     setState(() {
+  //       _selectedDate = DateTimeRange(start: startDate!, end: endDate!);
+  //     });
+  //   } else {
+  //     startDate = date;
+  //     endDate = null;
+  //     setState(() {});
+  //   }
+  // }
+
   void _selectDate(DateTime date) {
-    if (startDate == null) {
-      startDate = date;
-    } else if (endDate == null) {
-      endDate = date;
-      if (startDate!.isAfter(endDate!)) {
-        var temp = startDate;
-        startDate = endDate;
-        endDate = temp;
-      }
-      setState(() {
-        _selectedDate = DateTimeRange(start: startDate!, end: endDate!);
-      });
-    } else {
-      startDate = date;
-      endDate = null;
-      setState(() {});
-    }
+    _selectedDate = date;
   }
 
   void _previousMonth() {
@@ -87,49 +90,42 @@ class _IonDatePickerState extends State<IonDatePicker> {
     return GridView.builder(
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 7,
-        mainAxisSpacing: 16,
-        childAspectRatio: 1,
-      ),
+          crossAxisCount: 7,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1,
+          mainAxisExtent: 24),
       itemBuilder: (context, index) {
         final int dayOfMonth = index - DateTime(year, month, 1).weekday + 1;
-        final DateTime currentDate = DateTime(year, month, dayOfMonth);
-
         if (dayOfMonth <= 0 || dayOfMonth > daysInMonth) {
           final int dayOfMonthToShow = dayOfMonth <= 0
               ? dayOfMonth + daysInPrevMonth
               : dayOfMonth - daysInMonth;
-          return SizedBox(
-            height: 24.h,
-            width: 24.w,
-            child: Center(
-              child: Text(
-                dayOfMonthToShow.toString(),
-                style: const IonTextStyleBody(
-                  ionFontWeight: IonFontWeight.regular,
-                  ionFontStyle: IonFontStyle.normal,
-                  ionTextColor: IonTextColor.neutral5,
-                  ionFontSize: IonBodyFontSizeHeight.regular,
-                ),
+          return Center(
+            child: Text(
+              dayOfMonthToShow.toString(),
+              style: const IonTextStyleBody(
+                ionFontWeight: IonFontWeight.regular,
+                ionFontStyle: IonFontStyle.normal,
+                ionTextColor: IonTextColor.neutral5,
+                ionFontSize: IonBodyFontSizeHeight.regular,
               ),
             ),
           );
         } else {
+          final DateTime date = DateTime(year, month, dayOfMonth);
           return InkWell(
-            onTap: () => _selectDate(currentDate),
-            child: Container(
-              height: 24.h,
-              width: 24.w,
-              color: IonMainColors.primary1,
-              child: Center(
-                child: Text(
-                  dayOfMonth.toString(),
-                  style: const IonTextStyleBody(
-                    ionFontWeight: IonFontWeight.regular,
-                    ionFontStyle: IonFontStyle.normal,
-                    ionTextColor: IonTextColor.neutral7,
-                    ionFontSize: IonBodyFontSizeHeight.regular,
-                  ),
+            onTap: () {
+              _selectDate(date);
+              debugPrint(date.toString());
+            },
+            child: Center(
+              child: Text(
+                dayOfMonth.toString(),
+                style: const IonTextStyleBody(
+                  ionFontWeight: IonFontWeight.regular,
+                  ionFontStyle: IonFontStyle.normal,
+                  ionTextColor: IonTextColor.neutral7,
+                  ionFontSize: IonBodyFontSizeHeight.regular,
                 ),
               ),
             ),
@@ -172,59 +168,65 @@ class _IonDatePickerState extends State<IonDatePicker> {
         return StatefulBuilder(
           builder: (context, setState) => AlertDialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
             ),
             content: SizedBox(
-              width: 312.w,
-              height: 304.h,
+              width: 312,
+              height: 304,
               child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      InkWell(
-                        onTap: () => setState(() => _previousYear()),
-                        child: Container(
-                          height: 24.h,
-                          width: 24.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.r),
-                            border: Border.all(
-                              color: IonMainColors.neutral4,
+                      Tooltip(
+                        message: 'Ano interior',
+                        child: InkWell(
+                          onTap: () => setState(() => _previousYear()),
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: IonMainColors.neutral4,
+                              ),
                             ),
-                          ),
-                          child: SvgPicture.asset(
-                            IonIcons.left3,
-                            package: 'ion_mobile',
-                            color: IonMainColors.primary6,
-                            height: 9.67.h,
-                            width: 5.67.w,
+                            child: SvgPicture.asset(
+                              IonIcons.left3,
+                              package: 'ion_mobile',
+                              color: IonMainColors.primary6,
+                              height: 9.67,
+                              width: 5.67,
+                            ),
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () => setState(() => _previousMonth()),
-                        child: Container(
-                          height: 24.h,
-                          width: 24.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.r),
-                            border: Border.all(
-                              color: IonMainColors.neutral4,
+                      Tooltip(
+                        message: 'Mês Anterior',
+                        child: InkWell(
+                          onTap: () => setState(() => _previousMonth()),
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: IonMainColors.neutral4,
+                              ),
                             ),
-                          ),
-                          child: SvgPicture.asset(
-                            IonIcons.left2,
-                            package: 'ion_mobile',
-                            color: IonMainColors.primary6,
-                            height: 9.67.h,
-                            width: 5.67.w,
+                            child: SvgPicture.asset(
+                              IonIcons.left2,
+                              package: 'ion_mobile',
+                              color: IonMainColors.primary6,
+                              height: 9.67,
+                              width: 5.67,
+                            ),
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 24.h,
-                        width: 140.w,
+                        height: 24,
+                        width: 140,
                         child: Center(
                           child: Text(
                             '${monthNames[_currentDate.month - 1]} - ${_currentDate.year}',
@@ -237,73 +239,73 @@ class _IonDatePickerState extends State<IonDatePicker> {
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () => setState(() => _nextMonth()),
-                        child: Container(
-                          height: 24.h,
-                          width: 24.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.r),
-                            border: Border.all(
-                              color: IonMainColors.neutral4,
+                      Tooltip(
+                        message: 'Próximo Mês',
+                        child: InkWell(
+                          onTap: () => setState(() => _nextMonth()),
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: IonMainColors.neutral4,
+                              ),
                             ),
-                          ),
-                          child: SvgPicture.asset(
-                            IonIcons.right2,
-                            package: 'ion_mobile',
-                            color: IonMainColors.primary6,
-                            height: 9.67.h,
-                            width: 5.67.w,
+                            child: SvgPicture.asset(
+                              IonIcons.right2,
+                              package: 'ion_mobile',
+                              color: IonMainColors.primary6,
+                              height: 9.67,
+                              width: 5.67,
+                            ),
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () => setState(() => _nextYear()),
-                        child: Container(
-                          height: 24.h,
-                          width: 24.w,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100.r),
-                            border: Border.all(
-                              color: IonMainColors.neutral4,
+                      Tooltip(
+                        message: 'Próximo Ano',
+                        child: InkWell(
+                          onTap: () => setState(() => _nextYear()),
+                          child: Container(
+                            height: 24,
+                            width: 24,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: IonMainColors.neutral4,
+                              ),
                             ),
-                          ),
-                          child: SvgPicture.asset(
-                            IonIcons.right3,
-                            package: 'ion_mobile',
-                            color: IonMainColors.primary6,
-                            height: 9.67.h,
-                            width: 5.67.w,
+                            child: SvgPicture.asset(
+                              IonIcons.right3,
+                              package: 'ion_mobile',
+                              color: IonMainColors.primary6,
+                              height: 9.67,
+                              width: 5.67,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: 24.h),
-                  SizedBox(
-                    height: 16.h,
-                    width: double.infinity,
-                    child: ListView.builder(
-                      itemCount: daysName.length,
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, i) => Padding(
-                        padding: EdgeInsets.only(
-                            right: daysName[i] != daysName.last ? 17.w : 0),
-                        child: Text(
-                          daysName[i],
-                          style: const IonTextStyleBody(
-                            ionFontStyle: IonFontStyle.normal,
-                            ionFontWeight: IonFontWeight.regular,
-                            ionFontSize: IonBodyFontSizeHeight.small,
-                            ionTextColor: IonTextColor.neutral5,
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: daysName
+                        .map(
+                          (day) => Text(
+                            day,
+                            style: const IonTextStyleBody(
+                              ionFontStyle: IonFontStyle.normal,
+                              ionFontWeight: IonFontWeight.regular,
+                              ionFontSize: IonBodyFontSizeHeight.small,
+                              ionTextColor: IonTextColor.neutral5,
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
+                        )
+                        .toList(),
                   ),
-                  SizedBox(height: 8.h),
-                  Expanded(child: _buildCalendar(_currentDate)),
+                  const SizedBox(height: 8),
+                  _buildCalendar(_currentDate),
                 ],
               ),
             ),
