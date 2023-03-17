@@ -11,7 +11,7 @@ Future<DateTime?> showIonDatePicker({
   required DateTime lastDate,
   required DateTime selectedDate,
 }) async {
-  DateTime currentDate = firstDate;
+  DateTime currentDate = initialDate;
 
   void previousMonth() {
     if ((currentDate.month) == 1 && currentDate.year >= firstDate.year) return;
