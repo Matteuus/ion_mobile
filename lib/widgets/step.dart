@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:ion_mobile/design/colors.dart';
+import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/design/typography/body.dart';
 import 'package:ion_mobile/design/typography/text_style.dart';
 
@@ -119,8 +121,10 @@ class _IonStepperState extends State<IonStepper> {
       ),
       child: Center(
         child: state == IonStepState.completed
-            ? const Icon(
-                Icons.check,
+            ? SvgPicture.asset(
+                IonIcons.check,
+                package: 'ion_mobile',
+                allowDrawingOutsideViewBox: true,
                 color: IonMainColors.primary6,
               )
             : Text(
@@ -137,10 +141,13 @@ class _IonStepperState extends State<IonStepper> {
 
   Widget _buildLine(int index) {
     final step = widget.steps[index];
-    var color = step.state == IonStepState.completed
-        ? IonMainColors.primary6
-        : IonMainColors.neutral4;
-    return Container(width: 32, height: 1, color: color);
+    return Container(
+      width: 32,
+      height: 1,
+      color: step.state == IonStepState.completed
+          ? IonMainColors.primary6
+          : IonMainColors.neutral4,
+    );
   }
 
   Widget _buildTitle(int index) {
@@ -184,6 +191,8 @@ class _IonStepperState extends State<IonStepper> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   _buildTitle(index),
                 ],
