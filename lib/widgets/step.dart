@@ -99,11 +99,13 @@ class IonStepper extends StatefulWidget {
     required this.steps,
     this.currentStep = 0,
     required this.onStepChanged,
+    this.stepIsClicable = true,
   });
 
   List<IonStep> steps;
   final int currentStep;
   final ValueChanged<int> onStepChanged;
+  final bool stepIsClicable;
 
   @override
   State<IonStepper> createState() => _IonStepperState();
@@ -167,9 +169,8 @@ class _IonStepperState extends State<IonStepper> {
     }
 
     return InkWell(
-      onTap: () {
-        _onChangeStep(index);
-      },
+      onTap:
+          widget.stepIsClicable == false ? null : () => _onChangeStep(index),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         return Colors.transparent;
