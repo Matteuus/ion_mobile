@@ -51,7 +51,7 @@ class IonStep {
   });
 
   final String title;
-  final Widget? subtitle;
+  final String? subtitle;
   IonStepState state;
 }
 
@@ -74,20 +74,19 @@ class IonStepper extends StatefulWidget {
 class _IonStepperState extends State<IonStepper> {
   void _onChangeStep(int index) {
     if (index < 0 || index > widget.steps.length) return;
+    if (widget.steps[index].state == IonStepState.disabled) return;
 
-    setState(() {
-      for (int i = 0; i < widget.steps.length; i++) {
-        final step = widget.steps[i];
+    for (int i = 0; i < widget.steps.length; i++) {
+      final step = widget.steps[i];
 
-        if (i < index - 1) {
-          step.state = IonStepState.completed;
-        } else if (i == index - 1) {
-          step.state = IonStepState.current;
-        } else {
-          step.state = IonStepState.upComming;
-        }
+      if (i < index - 1) {
+        step.state = IonStepState.completed;
+      } else if (i == index - 1) {
+        step.state = IonStepState.current;
+      } else {
+        step.state = IonStepState.upComming;
       }
-    });
+    }
 
     widget.onStepChanged(index);
   }
@@ -109,6 +108,10 @@ class _IonStepperState extends State<IonStepper> {
       state = IonStepState.completed;
     } else if (index == widget.currentStep) {
       state = IonStepState.current;
+    } else if (step.state == IonStepState.disabled) {
+      state = IonStepState.disabled;
+    } else if (step.state == IonStepState.error) {
+      state = IonStepState.error;
     } else {
       state = IonStepState.upComming;
     }
@@ -120,7 +123,7 @@ class _IonStepperState extends State<IonStepper> {
         color: state.backgroundColor,
         border: Border.all(
           color: state.borderColor,
-          width: state == IonStepState.current ? 2.0 : 1.0,
+          width: 1.0,
         ),
         borderRadius: BorderRadius.circular(100.0),
       ),
@@ -132,24 +135,30 @@ class _IonStepperState extends State<IonStepper> {
                 allowDrawingOutsideViewBox: true,
                 color: IonMainColors.primary6,
               )
-            : Text(
-                label,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 14,
-                  color: state.foregroundColor,
-                ),
-              ),
+            : Text(label, style: _buildLabelTextStyle(state)),
       ),
     );
   }
 
   Widget _buildLine(int index) {
     final step = widget.steps[index];
+    IonStepState state = step.state;
+
+    if (index < widget.currentStep) {
+      state = IonStepState.completed;
+    } else if (index == widget.currentStep) {
+      state = IonStepState.current;
+    } else if (step.state == IonStepState.disabled) {
+      state = IonStepState.disabled;
+    } else {
+      state = IonStepState.upComming;
+    }
+
     return Container(
       width: 32,
       height: 1,
-      color: step.state == IonStepState.completed
+      margin: const EdgeInsets.only(top: 16),
+      color: state == IonStepState.completed
           ? IonMainColors.primary6
           : IonMainColors.neutral4,
     );
@@ -157,51 +166,98 @@ class _IonStepperState extends State<IonStepper> {
 
   Widget _buildTitle(int index) {
     final step = widget.steps[index];
+    IonStepState state = step.state;
+
+    if (index < widget.currentStep) {
+      state = IonStepState.completed;
+    } else if (index == widget.currentStep) {
+      state = IonStepState.current;
+    } else if (step.state == IonStepState.disabled) {
+      state = IonStepState.disabled;
+    } else {
+      state = IonStepState.upComming;
+    }
     return Text(
       step.title,
       style: IonTextStyleBody(
         ionFontStyle: IonFontStyle.normal,
         ionFontWeight: IonFontWeight.regular,
         ionFontSize: IonBodyFontSizeHeight.regular,
-        ionTextColor: step.state == IonStepState.completed
+        ionTextColor: state == IonStepState.current
             ? IonTextColor.neutral7
             : IonTextColor.neutral6,
       ),
     );
   }
 
+  IonTextStyleBody _buildLabelTextStyle(IonStepState state) {
+    if (state == IonStepState.disabled) {
+      return const IonTextStyleBody(
+        ionFontStyle: IonFontStyle.normal,
+        ionFontWeight: IonFontWeight.medium,
+        ionFontSize: IonBodyFontSizeHeight.regular,
+        ionTextColor: IonTextColor.neutral5,
+      );
+    } else if (state == IonStepState.upComming) {
+      return const IonTextStyleBody(
+        ionFontStyle: IonFontStyle.normal,
+        ionFontWeight: IonFontWeight.medium,
+        ionFontSize: IonBodyFontSizeHeight.regular,
+      );
+    } else {
+      return const IonTextStyleBody(
+        ionFontStyle: IonFontStyle.normal,
+        ionFontWeight: IonFontWeight.medium,
+        ionFontSize: IonBodyFontSizeHeight.regular,
+        ionTextColor: IonTextColor.neutral1,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: List.generate(
         widget.steps.length,
         (index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
+              if (!_isFirst(index)) _buildLine(index),
+              if (!_isFirst(index)) const SizedBox(width: 8),
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (!_isFirst(index)) _buildLine(index),
                   InkWell(
                     onTap: () {
                       _onChangeStep(index);
                     },
+                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        return Colors.transparent;
+                      },
+                    ),
                     child: _buildCircle(index),
                   ),
-                  if (!_isLast(index)) _buildLine(index)
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
                   _buildTitle(index),
+                  if (widget.steps[index].subtitle != null &&
+                      widget.steps[index].subtitle != "")
+                    Text(
+                      widget.steps[index].subtitle!,
+                      style: const IonTextStyleBody(
+                        ionFontStyle: IonFontStyle.normal,
+                        ionFontWeight: IonFontWeight.regular,
+                        ionFontSize: IonBodyFontSizeHeight.small,
+                        ionTextColor: IonTextColor.neutral6,
+                      ),
+                    )
                 ],
               ),
+              if (!_isLast(index)) const SizedBox(width: 8),
+              if (!_isLast(index)) _buildLine(index),
             ],
           );
         },
