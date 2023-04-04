@@ -10,45 +10,21 @@ enum IonStepState {
     backgroundColor: IonMainColors.neutral1,
     foregroundColor: IonMainColors.neutral8,
     borderColor: IonMainColors.neutral4,
-    backgroundHoverColor: IonMainColors.neutral1,
-    foregroundHoverColor: IonMainColors.primary7,
-    borderHoverColor: IonMainColors.primary4,
-    backgroundPressedColor: IonMainColors.primary1,
-    foregroundPressedColor: IonMainColors.primary7,
-    borderPressedColor: IonMainColors.primary6,
   ),
   completed(
     backgroundColor: IonMainColors.primary1,
     foregroundColor: IonMainColors.primary6,
     borderColor: IonMainColors.primary6,
-    backgroundHoverColor: IonMainColors.primary2,
-    foregroundHoverColor: IonMainColors.primary6,
-    borderHoverColor: IonMainColors.primary6,
-    backgroundPressedColor: IonMainColors.primary2,
-    foregroundPressedColor: IonMainColors.primary6,
-    borderPressedColor: IonMainColors.primary7,
   ),
   current(
     backgroundColor: IonMainColors.primary6,
     foregroundColor: IonMainColors.neutral1,
     borderColor: Colors.transparent,
-    backgroundHoverColor: IonMainColors.primary5,
-    foregroundHoverColor: IonMainColors.neutral1,
-    borderHoverColor: Colors.transparent,
-    backgroundPressedColor: IonMainColors.primary7,
-    foregroundPressedColor: IonMainColors.neutral1,
-    borderPressedColor: Colors.transparent,
   ),
   error(
     backgroundColor: IonIndicativeColors.negative6,
     foregroundColor: IonMainColors.neutral1,
     borderColor: Colors.transparent,
-    backgroundHoverColor: IonIndicativeColors.negative5,
-    foregroundHoverColor: IonMainColors.neutral1,
-    borderHoverColor: Colors.transparent,
-    backgroundPressedColor: IonIndicativeColors.negative7,
-    foregroundPressedColor: IonMainColors.neutral1,
-    borderPressedColor: Colors.transparent,
   ),
   disabled(
     backgroundColor: IonMainColors.neutral4,
@@ -60,24 +36,10 @@ enum IonStepState {
   final Color foregroundColor;
   final Color borderColor;
 
-  final Color? backgroundHoverColor;
-  final Color? foregroundHoverColor;
-  final Color? borderHoverColor;
-
-  final Color? backgroundPressedColor;
-  final Color? foregroundPressedColor;
-  final Color? borderPressedColor;
-
   const IonStepState({
     required this.backgroundColor,
     required this.foregroundColor,
     required this.borderColor,
-    this.backgroundHoverColor,
-    this.foregroundHoverColor,
-    this.borderHoverColor,
-    this.backgroundPressedColor,
-    this.foregroundPressedColor,
-    this.borderPressedColor,
   });
 }
 
