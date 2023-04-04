@@ -25,6 +25,11 @@ enum IonStepState {
     backgroundColor: IonIndicativeColors.negative6,
     foregroundColor: IonMainColors.neutral1,
     borderColor: Colors.transparent,
+  ),
+  disabled(
+    backgroundColor: IonMainColors.neutral4,
+    foregroundColor: IonMainColors.neutral5,
+    borderColor: Colors.transparent,
   );
 
   final Color backgroundColor;
