@@ -10,21 +10,45 @@ enum IonStepState {
     backgroundColor: IonMainColors.neutral1,
     foregroundColor: IonMainColors.neutral8,
     borderColor: IonMainColors.neutral4,
+    backgroundHoverColor: IonMainColors.neutral1,
+    foregroundHoverColor: IonMainColors.primary7,
+    borderHoverColor: IonMainColors.primary4,
+    backgroundPressedColor: IonMainColors.primary1,
+    foregroundPressedColor: IonMainColors.primary7,
+    borderPressedColor: IonMainColors.primary6,
   ),
   completed(
     backgroundColor: IonMainColors.primary1,
     foregroundColor: IonMainColors.primary6,
     borderColor: IonMainColors.primary6,
+    backgroundHoverColor: IonMainColors.primary2,
+    foregroundHoverColor: IonMainColors.primary6,
+    borderHoverColor: IonMainColors.primary6,
+    backgroundPressedColor: IonMainColors.primary2,
+    foregroundPressedColor: IonMainColors.primary6,
+    borderPressedColor: IonMainColors.primary7,
   ),
   current(
     backgroundColor: IonMainColors.primary6,
     foregroundColor: IonMainColors.neutral1,
     borderColor: Colors.transparent,
+    backgroundHoverColor: IonMainColors.primary5,
+    foregroundHoverColor: IonMainColors.neutral1,
+    borderHoverColor: Colors.transparent,
+    backgroundPressedColor: IonMainColors.primary7,
+    foregroundPressedColor: IonMainColors.neutral1,
+    borderPressedColor: Colors.transparent,
   ),
   error(
     backgroundColor: IonIndicativeColors.negative6,
     foregroundColor: IonMainColors.neutral1,
     borderColor: Colors.transparent,
+    backgroundHoverColor: IonIndicativeColors.negative5,
+    foregroundHoverColor: IonMainColors.neutral1,
+    borderHoverColor: Colors.transparent,
+    backgroundPressedColor: IonIndicativeColors.negative7,
+    foregroundPressedColor: IonMainColors.neutral1,
+    borderPressedColor: Colors.transparent,
   ),
   disabled(
     backgroundColor: IonMainColors.neutral4,
@@ -36,10 +60,24 @@ enum IonStepState {
   final Color foregroundColor;
   final Color borderColor;
 
+  final Color? backgroundHoverColor;
+  final Color? foregroundHoverColor;
+  final Color? borderHoverColor;
+
+  final Color? backgroundPressedColor;
+  final Color? foregroundPressedColor;
+  final Color? borderPressedColor;
+
   const IonStepState({
     required this.backgroundColor,
     required this.foregroundColor,
     required this.borderColor,
+    this.backgroundHoverColor,
+    this.foregroundHoverColor,
+    this.borderHoverColor,
+    this.backgroundPressedColor,
+    this.foregroundPressedColor,
+    this.borderPressedColor,
   });
 }
 
@@ -72,6 +110,8 @@ class IonStepper extends StatefulWidget {
 }
 
 class _IonStepperState extends State<IonStepper> {
+  int _hoveringIndex = -1;
+
   void _onChangeStep(int index) {
     if (index < 0 || index > widget.steps.length) return;
     if (widget.steps[index].state == IonStepState.disabled) return;
@@ -89,6 +129,12 @@ class _IonStepperState extends State<IonStepper> {
     }
 
     widget.onStepChanged(index);
+  }
+
+  void onHover(int index, bool hover) {
+    setState(() {
+      _hoveringIndex = hover ? index : -1;
+    });
   }
 
   bool _isFirst(int index) {
@@ -116,26 +162,42 @@ class _IonStepperState extends State<IonStepper> {
       state = IonStepState.upComming;
     }
 
-    return Container(
-      width: 32,
-      height: 32,
-      decoration: BoxDecoration(
-        color: state.backgroundColor,
-        border: Border.all(
-          color: state.borderColor,
-          width: 1.0,
+    return InkWell(
+      onTap: () {
+        _onChangeStep(index);
+      },
+      overlayColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+        return Colors.transparent;
+      }),
+      onHover: state == IonStepState.disabled
+          ? null
+          : (hover) => onHover(index, hover),
+      child: Container(
+        width: 32,
+        height: 32,
+        decoration: BoxDecoration(
+          color: index == _hoveringIndex
+              ? state.backgroundHoverColor
+              : state.backgroundColor,
+          border: Border.all(
+            color: state.borderColor,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(100.0),
         ),
-        borderRadius: BorderRadius.circular(100.0),
-      ),
-      child: Center(
-        child: state == IonStepState.completed
-            ? SvgPicture.asset(
-                IonIcons.check,
-                package: 'ion_mobile',
-                allowDrawingOutsideViewBox: true,
-                color: IonMainColors.primary6,
-              )
-            : Text(label, style: _buildLabelTextStyle(state)),
+        child: Center(
+          child: state == IonStepState.completed
+              ? SvgPicture.asset(
+                  IonIcons.check,
+                  package: 'ion_mobile',
+                  allowDrawingOutsideViewBox: true,
+                  color: index == _hoveringIndex
+                      ? state.foregroundHoverColor
+                      : state.foregroundColor,
+                )
+              : Text(label, style: _buildLabelTextStyle(state)),
+        ),
       ),
     );
   }
@@ -231,17 +293,7 @@ class _IonStepperState extends State<IonStepper> {
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  InkWell(
-                    onTap: () {
-                      _onChangeStep(index);
-                    },
-                    overlayColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        return Colors.transparent;
-                      },
-                    ),
-                    child: _buildCircle(index),
-                  ),
+                  _buildCircle(index),
                   _buildTitle(index),
                   if (widget.steps[index].subtitle != null &&
                       widget.steps[index].subtitle != "")
