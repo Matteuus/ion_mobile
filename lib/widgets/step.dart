@@ -123,6 +123,10 @@ class _IonStepperState extends State<IonStepper> {
         step.state = IonStepState.completed;
       } else if (i == index - 1) {
         step.state = IonStepState.current;
+      } else if (step.state == IonStepState.disabled) {
+        step.state = IonStepState.disabled;
+      } else if (step.state == IonStepState.error) {
+        step.state = IonStepState.error;
       } else {
         step.state = IonStepState.upComming;
       }
