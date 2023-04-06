@@ -226,33 +226,30 @@ class _IonStepperState extends State<IonStepper> {
   }
 
   IonTextStyleBody _buildLabelTextStyle(IonStepState state, int index) {
-    if (state == IonStepState.disabled) {
-      return const IonTextStyleBody(
-        ionFontStyle: IonFontStyle.normal,
-        ionFontWeight: IonFontWeight.medium,
-        ionFontSize: IonBodyFontSizeHeight.regular,
-        ionTextColor: IonTextColor.neutral5,
-      );
-    } else if (state == IonStepState.upComming && _hoveringIndex == index) {
-      return const IonTextStyleBody(
-        ionFontStyle: IonFontStyle.normal,
-        ionFontWeight: IonFontWeight.medium,
-        ionFontSize: IonBodyFontSizeHeight.regular,
-        ionTextColor: IonTextColor.primary7,
-      );
-    } else if (state == IonStepState.upComming) {
-      return const IonTextStyleBody(
-        ionFontStyle: IonFontStyle.normal,
-        ionFontWeight: IonFontWeight.medium,
-        ionFontSize: IonBodyFontSizeHeight.regular,
-      );
-    } else {
-      return const IonTextStyleBody(
-        ionFontStyle: IonFontStyle.normal,
-        ionFontWeight: IonFontWeight.medium,
-        ionFontSize: IonBodyFontSizeHeight.regular,
-        ionTextColor: IonTextColor.neutral1,
-      );
+    switch (state) {
+      case IonStepState.disabled:
+        return const IonTextStyleBody(
+          ionFontStyle: IonFontStyle.normal,
+          ionFontWeight: IonFontWeight.medium,
+          ionFontSize: IonBodyFontSizeHeight.regular,
+          ionTextColor: IonTextColor.neutral5,
+        );
+      case IonStepState.upComming:
+        return IonTextStyleBody(
+          ionFontStyle: IonFontStyle.normal,
+          ionFontWeight: IonFontWeight.medium,
+          ionFontSize: IonBodyFontSizeHeight.regular,
+          ionTextColor: _hoveringIndex == index
+              ? IonTextColor.primary7
+              : IonTextColor.neutral8,
+        );
+      default:
+        return const IonTextStyleBody(
+          ionFontStyle: IonFontStyle.normal,
+          ionFontWeight: IonFontWeight.medium,
+          ionFontSize: IonBodyFontSizeHeight.regular,
+          ionTextColor: IonTextColor.neutral1,
+        );
     }
   }
 
