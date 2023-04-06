@@ -22,7 +22,7 @@ void main() {
         // themeMode: ThemeMode.dark,
       );
     },
-    child: const Home(),
+    child: const FlutterBookPage(),
   ));
 }
 
@@ -35,45 +35,106 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool isLoading = false;
-  int currentStep = 0;
-
-  void onStepChanged(int index) {
-    setState(() {
-      currentStep = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    List<IonStep> steps = [
-      IonStep(
-        title: 'Step 1',
-      ),
-      IonStep(
-        title: 'Step 2',
-      ),
-      IonStep(
-        title: 'Step 3',
-        subtitle: '(optional)',
-        state: IonStepState.disabled,
-      ),
-      IonStep(title: 'Step 4', state: IonStepState.error),
-      IonStep(
-        title: 'Step 5',
-      ),
-    ];
-
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(
-        child: IonStepper(
-          currentStep: currentStep,
-          onStepChanged: onStepChanged,
-          steps: steps,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IonChipSelected(
+              text: 'Loren Ipsum, 100 - Centro',
+              icon: IonIcons.localization,
+              onDeleted: () => debugPrint('teste'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonChipUnselected(
+              text: 'Loren Ipsum, 100 - Centro',
+              icon: IonIcons.localization,
+              onDeleted: () => debugPrint('teste'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonPrimary(
+              ionIcon: IonIcons.pencil,
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonSecundary(
+              ionIcon: IonIcons.localization,
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonGhost(
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonDashed(
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+              text: "Salvar",
+              height: 48.h,
+              width: 296.w,
+              isLoading: isLoading,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonButtonSecundary(
+              icon: SvgPicture.asset(
+                'assets/icons/Photo.svg',
+                color: IonMainColors.primary6,
+                height: 30,
+              ),
+              height: 60.h,
+              width: 60.w,
+              isLoading: isLoading,
+              onTap: () => setState(() {
+                isLoading = !isLoading;
+              }),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IonInput(
+                maxLines: 3,
+                height: 82.h,
+                width: 292.w,
+                hintText:
+                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pharetra nunc ac tempus porttitor. Suspendisse eleifend nec justo sed tempor. Praesent nec ipsum at justo scelerisque suscipit eget vel nisl...'),
+          ],
         ),
       ),
-    ));
+    );
   }
 }
 
