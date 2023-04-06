@@ -100,18 +100,20 @@ class IonStep {
 }
 
 class IonStepper extends StatefulWidget {
-  IonStepper({
+  const IonStepper({
     super.key,
     required this.steps,
     this.currentStep = 0,
     required this.onStepChanged,
     this.stepIsClicable = true,
+    this.circleSize = 32,
   });
 
-  List<IonStep> steps;
+  final List<IonStep> steps;
   final int currentStep;
   final ValueChanged<int> onStepChanged;
   final bool stepIsClicable;
+  final double circleSize;
 
   @override
   State<IonStepper> createState() => _IonStepperState();
@@ -166,8 +168,8 @@ class _IonStepperState extends State<IonStepper> {
           ? null
           : (hover) => onHover(index, hover),
       child: Container(
-        width: 32,
-        height: 32,
+        width: widget.circleSize,
+        height: widget.circleSize,
         decoration: BoxDecoration(
           color: index == _hoveringIndex
               ? state.backgroundHoverColor
@@ -199,9 +201,9 @@ class _IonStepperState extends State<IonStepper> {
   Widget _buildLine(int index) {
     final state = _getStepState(index);
     return Container(
-      width: 32,
+      width: widget.circleSize * 2,
       height: 1,
-      margin: const EdgeInsets.only(top: 16),
+      margin: EdgeInsets.only(top: widget.circleSize / 2),
       color: state == IonStepState.completed
           ? IonMainColors.primary6
           : IonMainColors.neutral4,
