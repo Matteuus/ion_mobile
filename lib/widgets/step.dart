@@ -54,30 +54,36 @@ enum IonStepState {
     backgroundColor: IonMainColors.neutral4,
     foregroundColor: IonMainColors.neutral5,
     borderColor: Colors.transparent,
+    backgroundHoverColor: IonMainColors.neutral4,
+    foregroundHoverColor: IonMainColors.neutral5,
+    borderHoverColor: Colors.transparent,
+    backgroundPressedColor: IonMainColors.neutral4,
+    foregroundPressedColor: IonMainColors.neutral5,
+    borderPressedColor: Colors.transparent,
   );
 
   final Color backgroundColor;
   final Color foregroundColor;
   final Color borderColor;
 
-  final Color? backgroundHoverColor;
-  final Color? foregroundHoverColor;
-  final Color? borderHoverColor;
+  final Color backgroundHoverColor;
+  final Color foregroundHoverColor;
+  final Color borderHoverColor;
 
-  final Color? backgroundPressedColor;
-  final Color? foregroundPressedColor;
-  final Color? borderPressedColor;
+  final Color backgroundPressedColor;
+  final Color foregroundPressedColor;
+  final Color borderPressedColor;
 
   const IonStepState({
     required this.backgroundColor,
     required this.foregroundColor,
     required this.borderColor,
-    this.backgroundHoverColor,
-    this.foregroundHoverColor,
-    this.borderHoverColor,
-    this.backgroundPressedColor,
-    this.foregroundPressedColor,
-    this.borderPressedColor,
+    required this.backgroundHoverColor,
+    required this.foregroundHoverColor,
+    required this.borderHoverColor,
+    required this.backgroundPressedColor,
+    required this.foregroundPressedColor,
+    required this.borderPressedColor,
   });
 }
 
@@ -114,29 +120,6 @@ class IonStepper extends StatefulWidget {
 class _IonStepperState extends State<IonStepper> {
   int _hoveringIndex = -1;
 
-  void _onChangeStep(int index) {
-    if (index < 0 || index > widget.steps.length) return;
-    if (widget.steps[index].state == IonStepState.disabled) return;
-
-    for (int i = 0; i < widget.steps.length; i++) {
-      final step = widget.steps[i];
-
-      if (i < index - 1) {
-        step.state = IonStepState.completed;
-      } else if (i == index - 1) {
-        step.state = IonStepState.current;
-      } else if (step.state == IonStepState.disabled) {
-        step.state = IonStepState.disabled;
-      } else if (step.state == IonStepState.error) {
-        step.state = IonStepState.error;
-      } else {
-        step.state = IonStepState.upComming;
-      }
-    }
-
-    widget.onStepChanged(index);
-  }
-
   void onHover(int index, bool hover) {
     setState(() {
       _hoveringIndex = hover ? index : -1;
@@ -151,26 +134,30 @@ class _IonStepperState extends State<IonStepper> {
     return widget.steps.length - 1 == index;
   }
 
-  Widget _buildCircle(int index) {
+  IonStepState _getStepState(int index) {
     final step = widget.steps[index];
-    IonStepState state = step.state;
-    final String label = (index + 1).toString();
 
     if (index < widget.currentStep) {
-      state = IonStepState.completed;
+      return IonStepState.completed;
     } else if (index == widget.currentStep) {
-      state = IonStepState.current;
+      return IonStepState.current;
     } else if (step.state == IonStepState.disabled) {
-      state = IonStepState.disabled;
+      return IonStepState.disabled;
     } else if (step.state == IonStepState.error) {
-      state = IonStepState.error;
+      return IonStepState.error;
     } else {
-      state = IonStepState.upComming;
+      return IonStepState.upComming;
     }
+  }
+
+  Widget _buildCircle(int index) {
+    final state = _getStepState(index);
+    final String label = (index + 1).toString();
 
     return InkWell(
-      onTap:
-          widget.stepIsClicable == false ? null : () => _onChangeStep(index),
+      onTap: widget.stepIsClicable == false
+          ? null
+          : () => widget.onStepChanged(index),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         return Colors.transparent;
@@ -186,7 +173,9 @@ class _IonStepperState extends State<IonStepper> {
               ? state.backgroundHoverColor
               : state.backgroundColor,
           border: Border.all(
-            color: state.borderColor,
+            color: index == _hoveringIndex
+                ? state.borderHoverColor
+                : state.borderColor,
             width: 1.0,
           ),
           borderRadius: BorderRadius.circular(100.0),
@@ -201,26 +190,14 @@ class _IonStepperState extends State<IonStepper> {
                       ? state.foregroundHoverColor
                       : state.foregroundColor,
                 )
-              : Text(label, style: _buildLabelTextStyle(state)),
+              : Text(label, style: _buildLabelTextStyle(state, index)),
         ),
       ),
     );
   }
 
   Widget _buildLine(int index) {
-    final step = widget.steps[index];
-    IonStepState state = step.state;
-
-    if (index < widget.currentStep) {
-      state = IonStepState.completed;
-    } else if (index == widget.currentStep) {
-      state = IonStepState.current;
-    } else if (step.state == IonStepState.disabled) {
-      state = IonStepState.disabled;
-    } else {
-      state = IonStepState.upComming;
-    }
-
+    final state = _getStepState(index);
     return Container(
       width: 32,
       height: 1,
@@ -233,17 +210,8 @@ class _IonStepperState extends State<IonStepper> {
 
   Widget _buildTitle(int index) {
     final step = widget.steps[index];
-    IonStepState state = step.state;
+    final state = _getStepState(index);
 
-    if (index < widget.currentStep) {
-      state = IonStepState.completed;
-    } else if (index == widget.currentStep) {
-      state = IonStepState.current;
-    } else if (step.state == IonStepState.disabled) {
-      state = IonStepState.disabled;
-    } else {
-      state = IonStepState.upComming;
-    }
     return Text(
       step.title,
       style: IonTextStyleBody(
@@ -257,13 +225,20 @@ class _IonStepperState extends State<IonStepper> {
     );
   }
 
-  IonTextStyleBody _buildLabelTextStyle(IonStepState state) {
+  IonTextStyleBody _buildLabelTextStyle(IonStepState state, int index) {
     if (state == IonStepState.disabled) {
       return const IonTextStyleBody(
         ionFontStyle: IonFontStyle.normal,
         ionFontWeight: IonFontWeight.medium,
         ionFontSize: IonBodyFontSizeHeight.regular,
         ionTextColor: IonTextColor.neutral5,
+      );
+    } else if (state == IonStepState.upComming && _hoveringIndex == index) {
+      return const IonTextStyleBody(
+        ionFontStyle: IonFontStyle.normal,
+        ionFontWeight: IonFontWeight.medium,
+        ionFontSize: IonBodyFontSizeHeight.regular,
+        ionTextColor: IonTextColor.primary7,
       );
     } else if (state == IonStepState.upComming) {
       return const IonTextStyleBody(
