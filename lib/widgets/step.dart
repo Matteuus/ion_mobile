@@ -87,11 +87,11 @@ enum IonStepState {
   });
 }
 
-class IonStep {
-  IonStep({
+abstract class IonAbstractStep {
+  IonAbstractStep({
     required this.title,
-    this.subtitle,
-    this.state = IonStepState.upComming,
+    required this.subtitle,
+    required this.state,
   });
 
   final String title;
@@ -99,21 +99,40 @@ class IonStep {
   IonStepState state;
 }
 
-class IonStepper extends StatefulWidget {
-  const IonStepper({
+abstract class IonAbstractStepper extends StatefulWidget {
+  const IonAbstractStepper({
     super.key,
     required this.steps,
-    this.currentStep = 0,
+    required this.currentStep,
     required this.onStepChanged,
-    this.stepIsClicable = true,
-    this.circleSize = 32,
+    required this.circleIsClicable,
+    required this.circleSize,
   });
 
   final List<IonStep> steps;
   final int currentStep;
   final ValueChanged<int> onStepChanged;
-  final bool stepIsClicable;
+  final bool circleIsClicable;
   final double circleSize;
+}
+
+class IonStep extends IonAbstractStep {
+  IonStep({
+    required super.title,
+    super.state = IonStepState.upComming,
+    super.subtitle,
+  });
+}
+
+class IonStepper extends IonAbstractStepper {
+  const IonStepper({
+    super.key,
+    required super.steps,
+    super.currentStep = 0,
+    required super.onStepChanged,
+    super.circleIsClicable = true,
+    super.circleSize = 32,
+  });
 
   @override
   State<IonStepper> createState() => _IonStepperState();
@@ -121,11 +140,17 @@ class IonStepper extends StatefulWidget {
 
 class _IonStepperState extends State<IonStepper> {
   int _hoveringIndex = -1;
+  bool pressed = false;
 
   void onHover(int index, bool hover) {
     setState(() {
       _hoveringIndex = hover ? index : -1;
     });
+  }
+
+  void changeStep(int index) {
+    if (index < 0 || index > widget.steps.length) return;
+    widget.onStepChanged(index);
   }
 
   bool _isFirst(int index) {
@@ -157,9 +182,7 @@ class _IonStepperState extends State<IonStepper> {
     final String label = (index + 1).toString();
 
     return InkWell(
-      onTap: widget.stepIsClicable == false
-          ? null
-          : () => widget.onStepChanged(index),
+      onTap: widget.circleIsClicable == false ? null : () => changeStep(index),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         return Colors.transparent;
