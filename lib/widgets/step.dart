@@ -225,7 +225,7 @@ class _IonStepperState extends State<IonStepper> {
       child: Container(
         width: widget.circleSize * 2,
         height: 1,
-        margin: EdgeInsets.only(top: widget.circleSize / 2),
+        margin: EdgeInsets.fromLTRB(8, widget.circleSize / 2, 8, 0),
         color: state == IonStepState.completed
             ? IonMainColors.primary6
             : IonMainColors.neutral4,
@@ -296,6 +296,7 @@ class _IonStepperState extends State<IonStepper> {
     final List<Widget> children = <Widget>[
       for (int i = 0; i < widget.steps.length; i += 1) ...<Widget>{
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             _buildCircle(i),
             _buildTitle(i),
