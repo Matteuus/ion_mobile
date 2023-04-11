@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutterbook/flutterbook.dart';
 import 'package:ion_mobile/ion_mobile.dart';
 
@@ -69,6 +70,40 @@ IonStepper(
         },
       ),
       ComponentState(
+        stateName: "Completed",
+        markdown: """## O IonStep error """,
+        codeSample: r'''
+IonStepper(
+  currentStep:1,
+  onStepChanged:(int i){},
+  steps:[
+    IonStep(
+      title:'Step',
+      state: IonStepState.completed,
+    ),
+  ],
+);
+''',
+        builder: (context, c) {
+          return Center(
+            child: IonStepper(
+              currentStep: 1,
+              onStepChanged: (int i) {},
+              steps: [
+                IonStep(
+                  title: c.text(
+                    label: 'Text',
+                    initial: 'Step',
+                    description: 'Define the text displayed in step',
+                  ),
+                  state: IonStepState.error,
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      ComponentState(
         stateName: "Disabled",
         markdown: """## O IonStep disabled """,
         codeSample: r'''
@@ -127,6 +162,11 @@ IonStepper(
             child: IonStepper(
               currentStep: -1,
               onStepChanged: (int i) {},
+              circleSize: c.number(
+                label: 'circleSize',
+                initial: 32.r,
+                description: 'Define the circle size in step',
+              ),
               steps: [
                 IonStep(
                   title: c.text(
