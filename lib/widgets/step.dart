@@ -128,7 +128,7 @@ class IonStepper extends IonAbstractStepper {
   const IonStepper({
     super.key,
     required super.steps,
-    super.currentStep = 0,
+    required super.currentStep,
     required super.onStepChanged,
     super.circleIsClicable = true,
     super.circleSize = 32,
@@ -146,11 +146,6 @@ class _IonStepperState extends State<IonStepper> {
     setState(() {
       _hoveringIndex = hover ? index : -1;
     });
-  }
-
-  void changeStep(int index) {
-    if (index < 0 || index > widget.steps.length) return;
-    widget.onStepChanged(index);
   }
 
   bool _isFirst(int index) {
@@ -182,7 +177,10 @@ class _IonStepperState extends State<IonStepper> {
     final String label = (index + 1).toString();
 
     return InkWell(
-      onTap: widget.circleIsClicable == false ? null : () => changeStep(index),
+      onTap: widget.circleIsClicable == false ||
+              widget.steps[index].state == IonStepState.disabled
+          ? null
+          : () => widget.onStepChanged(index),
       overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
         return Colors.transparent;
@@ -223,13 +221,15 @@ class _IonStepperState extends State<IonStepper> {
 
   Widget _buildLine(int index) {
     final state = _getStepState(index);
-    return Container(
-      width: widget.circleSize * 2,
-      height: 1,
-      margin: EdgeInsets.only(top: widget.circleSize / 2),
-      color: state == IonStepState.completed
-          ? IonMainColors.primary6
-          : IonMainColors.neutral4,
+    return Expanded(
+      child: Container(
+        width: widget.circleSize * 2,
+        height: 1,
+        margin: EdgeInsets.only(top: widget.circleSize / 2),
+        color: state == IonStepState.completed
+            ? IonMainColors.primary6
+            : IonMainColors.neutral4,
+      ),
     );
   }
 
@@ -246,6 +246,20 @@ class _IonStepperState extends State<IonStepper> {
         ionTextColor: state == IonStepState.current
             ? IonTextColor.neutral7
             : IonTextColor.neutral6,
+      ),
+    );
+  }
+
+  Widget _buildSubtitle(int index) {
+    final step = widget.steps[index];
+
+    return Text(
+      step.subtitle!,
+      style: const IonTextStyleBody(
+        ionFontStyle: IonFontStyle.normal,
+        ionFontWeight: IonFontWeight.regular,
+        ionFontSize: IonBodyFontSizeHeight.small,
+        ionTextColor: IonTextColor.neutral6,
       ),
     );
   }
@@ -278,44 +292,32 @@ class _IonStepperState extends State<IonStepper> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildStepper() {
+    final List<Widget> children = <Widget>[
+      for (int i = 0; i < widget.steps.length; i += 1) ...<Widget>{
+        Column(
+          children: <Widget>[
+            _buildCircle(i),
+            _buildTitle(i),
+            if (widget.steps[i].subtitle != null &&
+                widget.steps[i].subtitle!.isNotEmpty) ...<Widget>{
+              _buildSubtitle(i),
+            }
+          ],
+        ),
+        if (!_isLast(i)) _buildLine(i),
+      }
+    ];
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: List.generate(
-        widget.steps.length,
-        (index) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (!_isFirst(index)) _buildLine(index),
-              if (!_isFirst(index)) const SizedBox(width: 8),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildCircle(index),
-                  _buildTitle(index),
-                  if (widget.steps[index].subtitle != null &&
-                      widget.steps[index].subtitle != "")
-                    Text(
-                      widget.steps[index].subtitle!,
-                      style: const IonTextStyleBody(
-                        ionFontStyle: IonFontStyle.normal,
-                        ionFontWeight: IonFontWeight.regular,
-                        ionFontSize: IonBodyFontSizeHeight.small,
-                        ionTextColor: IonTextColor.neutral6,
-                      ),
-                    )
-                ],
-              ),
-              if (!_isLast(index)) const SizedBox(width: 8),
-              if (!_isLast(index)) _buildLine(index),
-            ],
-          );
-        },
-      ),
+      children: children,
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildStepper();
   }
 }
