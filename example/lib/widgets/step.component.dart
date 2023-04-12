@@ -14,7 +14,6 @@ Organizer stepComponent() {
         markdown: """## O IonStep padrão """,
         codeSample: r'''
 IonStepper(
-  currentStep:-1,
   onStepChanged:(int i){},
   steps:[
     IonStep(title:'UpComming'),
@@ -74,7 +73,6 @@ IonStepper(
         markdown: """## O IonStep error """,
         codeSample: r'''
 IonStepper(
-  currentStep:1,
   onStepChanged:(int i){},
   steps:[
     IonStep(
@@ -96,7 +94,7 @@ IonStepper(
                     initial: 'Step',
                     description: 'Define the text displayed in step',
                   ),
-                  state: IonStepState.error,
+                  state: IonStepState.completed,
                 ),
               ],
             ),
@@ -108,7 +106,7 @@ IonStepper(
         markdown: """## O IonStep disabled """,
         codeSample: r'''
 IonStepper(
-  currentStep:-1,
+  currentStep:0,
   onStepChanged:(int i){},
   steps:[
     IonStep(
@@ -121,18 +119,13 @@ IonStepper(
         builder: (context, c) {
           return Center(
             child: IonStepper(
-              currentStep: -1,
+              currentStep: 0,
               onStepChanged: (int i) {},
               steps: [
                 IonStep(
                   title: c.text(
                     label: 'Text',
                     initial: 'Step',
-                    description: 'Define the text displayed in step',
-                  ),
-                  subtitle: c.text(
-                    label: 'Text',
-                    initial: '(optional)',
                     description: 'Define the text displayed in step',
                   ),
                   state: IonStepState.disabled,
