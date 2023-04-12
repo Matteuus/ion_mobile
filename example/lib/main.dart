@@ -1,4 +1,5 @@
 import 'package:example/widgets/button.component.dart';
+import 'package:example/widgets/step.component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,8 @@ import 'package:flutterbook/flutterbook.dart';
 import 'package:ion_mobile/design/colors.dart';
 import 'package:ion_mobile/design/iconography/ion_icons.dart';
 import 'package:ion_mobile/ion_mobile.dart';
+
+import 'widgets/date_picker.component.dart';
 
 void main() {
   runApp(ScreenUtilInit(
@@ -204,6 +207,13 @@ class FlutterBookPage extends StatelessWidget {
                 folderName: 'Navigation',
                 organizers: [
                   buttonComponent(),
+                  stepComponent(),
+                ],
+              ),
+              Folder(
+                folderName: 'Data Entry',
+                organizers: [
+                  datePickerComponent(),
                 ],
               )
             ],
