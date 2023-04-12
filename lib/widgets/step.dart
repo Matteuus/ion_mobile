@@ -159,9 +159,9 @@ class _IonStepperState extends State<IonStepper> {
   IonStepState _getStepState(int index) {
     final step = widget.steps[index];
 
-    if (index < widget.currentStep) {
+    if (index < widget.currentStep || step.state == IonStepState.completed && index == widget.currentStep) {
       return IonStepState.completed;
-    } else if (index == widget.currentStep) {
+    } else if (index == widget.currentStep && step.state != IonStepState.disabled) {
       return IonStepState.current;
     } else if (step.state == IonStepState.disabled) {
       return IonStepState.disabled;
